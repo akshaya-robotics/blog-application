@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Blog Details - My Blog</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        nav {
+            background: #222;
+            padding: 15px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .blog-details {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-details h1 {
+            margin-top: 0;
+        }
+
+        .author {
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .category {
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .content {
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .back-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 20px;
+
+    background: #222;
+    color: white;
+
+    text-decoration: none;
+    border-radius: 6px;
+
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: #444;
+    transform: translateY(-1px);
+}
+    </style>
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            My Blog
+        </div>
+
+        <div>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="create-blog.html">Create Blog</a>
+        </div>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="blog-details" id="blog-details">
+
+            <!-- Blog will appear here -->
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const blogs =
+            JSON.parse(localStorage.getItem("blogs")) || [];
+
+        const selectedIndex =
+            localStorage.getItem("selectedBlog");
+
+        const blogDetails =
+            document.getElementById("blog-details");
+
+
+        if (
+            selectedIndex === null ||
+            !blogs[selectedIndex]
+        ) {
+
+            blogDetails.innerHTML = `
+                <h1>Blog Not Found</h1>
+                <p>The selected blog could not be found.</p>
+
+                <a
+                    href="dashboard.html"
+                    class="back-btn"
+                >
+                    Back to Dashboard
+                </a>
+            `;
+
+        } else {
+
+            const blog = blogs[selectedIndex];
+
+            blogDetails.innerHTML = `
+
+                <h1>${blog.title}</h1>
+
+                <div class="author">
+                    By ${blog.author}
+                </div>
+
+                <div class="category">
+                    Category: ${blog.category || "Not specified"}
+                </div>
+
+                <div class="content">
+                    ${blog.content}
+                </div>
+
+                <a
+                    href="dashboard.html"
+                    class="back-btn"
+                >
+                    ← Back to Dashboard
+                </a>
+
+            `;
+        }
+
+    </script>
+
+</body>
+</html>
