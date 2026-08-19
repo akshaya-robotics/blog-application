@@ -1,3 +1,5 @@
+
+// Registration
 const registerForm = document.querySelector(".register-container form");
 
 if (registerForm) {
@@ -23,6 +25,9 @@ if (registerForm) {
         window.location.href = "login.html";
     });
 }
+
+
+// Login
 const loginForm = document.querySelector(".login-container form");
 
 if (loginForm) {
@@ -36,6 +41,7 @@ if (loginForm) {
         const savedPassword = localStorage.getItem("userPassword");
 
         if (email === savedEmail && password === savedPassword) {
+            localStorage.setItem("userEmail",email);
             alert("Login successful!");
             window.location.href = "dashboard.html";
         } else {
@@ -43,6 +49,9 @@ if (loginForm) {
         }
     });
 }
+
+
+// Create Blog
 const blogForm = document.querySelector(".blog-form form");
 
 if (blogForm) {
@@ -52,13 +61,11 @@ if (blogForm) {
         const title = document.getElementById("title").value;
         const author = document.getElementById("author").value;
         const content = document.getElementById("content").value;
-        const category = document.getElementById("category").value;
 
         const blog = {
             title: title,
             author: author,
-            content: content,
-            category: category
+            content: content
         };
 
         let blogs = JSON.parse(localStorage.getItem("blogs")) || [];
@@ -72,6 +79,9 @@ if (blogForm) {
         window.location.href = "dashboard.html";
     });
 }
+
+
+// Display Blogs
 const blogList = document.getElementById("blog-list");
 
 if (blogList) {
@@ -85,19 +95,14 @@ if (blogList) {
         blogCard.innerHTML = `
             <h2>${blog.title}</h2>
             <div class="author">By ${blog.author}</div>
-            <div class="category">category: ${blog.category || "Not specified"}</div>
             <p>${blog.content}</p>
-            <button class="read-btn" onclick="readBlog(${index})">
-    Read More
-</button>
 
             <div class="actions">
-            <button class="edit-btn"
-            onclick="editBlog(${index})">
-                Edit
-            <button>
+                <button class="edit-btn" onclick="editBlog(${index})">
+                    Edit
+                </button>
 
-                        <button class="delete-btn" onclick="deleteBlog(${index})">
+                <button class="delete-btn" onclick="deleteBlog(${index})">
                     Delete
                 </button>
             </div>
@@ -107,6 +112,8 @@ if (blogList) {
     });
 }
 
+
+// Delete Blog
 function deleteBlog(index) {
     let blogs = JSON.parse(localStorage.getItem("blogs")) || [];
 
@@ -116,11 +123,21 @@ function deleteBlog(index) {
 
     window.location.reload();
 }
+
+
+// Edit Blog
 function editBlog(index) {
     let blogs = JSON.parse(localStorage.getItem("blogs")) || [];
 
-    const newTitle = prompt("Enter new blog title:", blogs[index].title);
-    const newContent = prompt("Enter new blog content:", blogs[index].content);
+    const newTitle = prompt(
+        "Enter new blog title:",
+        blogs[index].title
+    );
+
+    const newContent = prompt(
+        "Enter new blog content:",
+        blogs[index].content
+    );
 
     if (newTitle && newContent) {
         blogs[index].title = newTitle;
@@ -130,40 +147,4 @@ function editBlog(index) {
 
         window.location.reload();
     }
-}
-function searchBlogs() {
-    const searchText = document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase();
-
-    const selectedCategory = document
-        .getElementById("categoryFilter")
-        .value;
-
-    const blogCards = document.querySelectorAll(".blog-card");
-
-    blogCards.forEach(function(card) {
-        const text = card.textContent.toLowerCase();
-        const category = card.querySelector(".category").textContent;
-
-        const matchesSearch = text.includes(searchText);
-        const matchesCategory =
-            selectedCategory === "" ||
-            category.includes(selectedCategory);
-
-        if (matchesSearch && matchesCategory) {
-            card.style.display = "";
-        } else {
-            card.style.display = "none";
-        }
-    });
-}
-
-function filterBlogs() {
-    searchBlogs();
-}
-function readBlog(index) {
-    localStorage.setItem("selectedBlog", index);
-    window.location.href = "blog-details.html";
 }
