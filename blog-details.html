@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +22,6 @@
         nav {
             background: #222;
             padding: 15px 30px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -39,23 +39,26 @@
             margin-left: 20px;
         }
 
+        nav a:hover {
+            color: #ddd;
+        }
+
         .container {
             width: 90%;
             max-width: 800px;
-            margin: 40px auto;
+            margin: 50px auto;
         }
 
         .blog-details {
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .blog-details h1 {
             margin-top: 0;
+            margin-bottom: 15px;
         }
 
         .author {
@@ -74,24 +77,22 @@
         }
 
         .back-btn {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 12px 20px;
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 20px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
 
-    background: #222;
-    color: white;
+        .back-btn:hover {
+            background: #444;
+        }
 
-    text-decoration: none;
-    border-radius: 6px;
-
-    font-size: 15px;
-    transition: 0.2s;
-}
-
-.back-btn:hover {
-    background: #444;
-    transform: translateY(-1px);
-}
+        .error {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -111,78 +112,130 @@
 
     </nav>
 
-
     <div class="container">
 
         <div class="blog-details" id="blog-details">
 
-            <!-- Blog will appear here -->
+            <p>Loading blog...</p>
 
         </div>
 
     </div>
 
-
     <script>
-
-        const blogs =
-            JSON.parse(localStorage.getItem("blogs")) || [];
-
-        const selectedIndex =
-            localStorage.getItem("selectedBlog");
 
         const blogDetails =
             document.getElementById("blog-details");
 
+        const urlParams =
+            new URLSearchParams(window.location.search);
 
-        if (
-            selectedIndex === null ||
-            !blogs[selectedIndex]
-        ) {
+        const blogId =
+            urlParams.get("id");
 
-            blogDetails.innerHTML = `
-                <h1>Blog Not Found</h1>
-                <p>The selected blog could not be found.</p>
 
-                <a
-                    href="dashboard.html"
-                    class="back-btn"
-                >
-                    Back to Dashboard
-                </a>
-            `;
+        async function loadBlogDetails() {
 
-        } else {
+            if (!blogId) {
 
-            const blog = blogs[selectedIndex];
+                blogDetails.innerHTML = `
+                    <div class="error">
+                        <h1>Blog Not Found</h1>
+                        <p>No blog ID was provided.</p>
 
-            blogDetails.innerHTML = `
+                        <a
+                            href="dashboard.html"
+                            class="back-btn"
+                        >
+                            ← Back to Dashboard
+                        </a>
+                    </div>
+                `;
 
-                <h1>${blog.title}</h1>
+                return;
+            }
 
-                <div class="author">
-                    By ${blog.author}
-                </div>
 
-                <div class="category">
-                    Category: ${blog.category || "Not specified"}
-                </div>
+            try {
 
-                <div class="content">
-                    ${blog.content}
-                </div>
+                const response = await fetch(
+                    `http://localhost:3000/api/blogs/${blogId}`
+                );
 
-                <a
-                    href="dashboard.html"
-                    class="back-btn"
-                >
-                    ← Back to Dashboard
-                </a>
 
-            `;
+                if (!response.ok) {
+
+                    throw new Error("Blog not found");
+
+                }
+
+
+                const blog =
+                    await response.json();
+
+
+                blogDetails.innerHTML = `
+
+                    <h1>${blog.title}</h1>
+
+                    <div class="author">
+                        By ${blog.author}
+                    </div>
+
+                    <div class="category">
+                        Category:
+                        ${blog.category || "Not specified"}
+                    </div>
+
+                    <div class="content">
+                        ${blog.content}
+                    </div>
+
+                    <a
+                        href="dashboard.html"
+                        class="back-btn"
+                    >
+                        ← Back to Dashboard
+                    </a>
+
+                `;
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                blogDetails.innerHTML = `
+
+                    <div class="error">
+
+                        <h1>Blog Not Found</h1>
+
+                        <p>
+                            The selected blog could not be found.
+                        </p>
+
+                        <a
+                            href="dashboard.html"
+                            class="back-btn"
+                        >
+                            ← Back to Dashboard
+                        </a>
+
+                    </div>
+
+                `;
+
+            }
+
         }
+
+
+        loadBlogDetails();
 
     </script>
 
 </body>
+
 </html>
