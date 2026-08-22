@@ -263,17 +263,16 @@
 
 
     <script>
-    if (localStorage.getItem("userEmail") === null) {
-        window.location.replace("login.html");
-    }
+    const loggedInUser = localStorage.getItem("user");
 
-    function logout() {
-        localStorage.removeItem("userName");
-        localStorage.removeItem("userEmail");
-        localStorage.removeItem("userPassword");
+if (!loggedInUser) {
+    window.location.replace("login.html");
+}
 
-        window.location.replace("login.html");
-    }
+function logout() {
+    localStorage.removeItem("user");
+    window.location.replace("login.html");
+}
 </script>
 
 <script src="js/script.js"></script>
