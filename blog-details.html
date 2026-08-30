@@ -108,9 +108,11 @@
             <a href="index.html">Home</a>
             <a href="dashboard.html">Dashboard</a>
             <a href="create-blog.html">Create Blog</a>
+            <a href="login.html">Login</a>
         </div>
 
     </nav>
+
 
     <div class="container">
 
@@ -122,73 +124,186 @@
 
     </div>
 
+
     <script>
+
+        const API_URL = "http://localhost:3000";
 
         const blogDetails =
             document.getElementById("blog-details");
 
-        const urlParams =
-            new URLSearchParams(window.location.search);
 
-        const blogId =
-            urlParams.get("id");
+        // ==============================
+        // GET TOKEN
+        // ==============================
 
+        const token =
+            localStorage.getItem("token");
+
+
+        // ==============================
+        // CHECK LOGIN
+        // ==============================
+
+        if (!token) {
+
+            blogDetails.innerHTML = `
+
+                <div class="error">
+
+                    <h1>Please Login</h1>
+
+                    <p>
+                        You must be logged in to view this blog.
+                    </p>
+
+                    <a
+                        href="login.html"
+                        class="back-btn"
+                    >
+                        Go to Login
+                    </a>
+
+                </div>
+
+            `;
+
+        } else {
+
+            loadBlogDetails();
+
+        }
+
+
+        // ==============================
+        // LOAD BLOG
+        // ==============================
 
         async function loadBlogDetails() {
 
+            const urlParams =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const blogId =
+                urlParams.get("id");
+
+
             if (!blogId) {
 
-                blogDetails.innerHTML = `
-                    <div class="error">
-                        <h1>Blog Not Found</h1>
-                        <p>No blog ID was provided.</p>
-
-                        <a
-                            href="dashboard.html"
-                            class="back-btn"
-                        >
-                            ← Back to Dashboard
-                        </a>
-                    </div>
-                `;
+                showError(
+                    "No blog ID was provided."
+                );
 
                 return;
             }
 
 
+            console.log(
+                "Loading blog ID:",
+                blogId
+            );
+
+
             try {
 
-                const response = await fetch(
-                    `http://localhost:3000/api/blogs/${blogId}`
+                const response =
+                    await fetch(
+                        `${API_URL}/api/blogs/${blogId}`,
+                        {
+                            method: "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json"
+                            }
+                        }
+                    );
+
+
+                console.log(
+                    "Blog details status:",
+                    response.status
                 );
 
 
-                if (!response.ok) {
-
-                    throw new Error("Blog not found");
-
-                }
-
-
-                const blog =
+                const data =
                     await response.json();
 
 
+                console.log(
+                    "Blog details response:",
+                    data
+                );
+
+
+                // ==============================
+                // TOKEN EXPIRED
+                // ==============================
+
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+
+                    alert(
+                        "Your session has expired. Please login again."
+                    );
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+                }
+
+
+                // ==============================
+                // BLOG NOT FOUND
+                // ==============================
+
+                if (!response.ok) {
+
+                    showError(
+                        data.message ||
+                        "The selected blog could not be found."
+                    );
+
+                    return;
+                }
+
+
+                // ==============================
+                // DISPLAY BLOG
+                // ==============================
+
                 blogDetails.innerHTML = `
 
-                    <h1>${blog.title}</h1>
+                    <h1>
+                        ${escapeHTML(data.title)}
+                    </h1>
 
                     <div class="author">
-                        By ${blog.author}
+                        By ${escapeHTML(data.author)}
                     </div>
 
                     <div class="category">
                         Category:
-                        ${blog.category || "Not specified"}
+                        ${escapeHTML(
+                            data.category ||
+                            "Not specified"
+                        )}
                     </div>
 
                     <div class="content">
-                        ${blog.content}
+                        ${escapeHTML(data.content)}
                     </div>
 
                     <a
@@ -204,35 +319,64 @@
 
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Blog details error:",
+                    error
+                );
 
-                blogDetails.innerHTML = `
-
-                    <div class="error">
-
-                        <h1>Blog Not Found</h1>
-
-                        <p>
-                            The selected blog could not be found.
-                        </p>
-
-                        <a
-                            href="dashboard.html"
-                            class="back-btn"
-                        >
-                            ← Back to Dashboard
-                        </a>
-
-                    </div>
-
-                `;
+                showError(
+                    "Unable to connect to the backend server."
+                );
 
             }
 
         }
 
 
-        loadBlogDetails();
+        // ==============================
+        // SHOW ERROR
+        // ==============================
+
+        function showError(message) {
+
+            blogDetails.innerHTML = `
+
+                <div class="error">
+
+                    <h1>Blog Not Found</h1>
+
+                    <p>
+                        ${escapeHTML(message)}
+                    </p>
+
+                    <a
+                        href="dashboard.html"
+                        class="back-btn"
+                    >
+                        ← Back to Dashboard
+                    </a>
+
+                </div>
+
+            `;
+
+        }
+
+
+        // ==============================
+        // SECURITY
+        // ==============================
+
+        function escapeHTML(value) {
+
+            return String(value || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
 
     </script>
 
