@@ -30,6 +30,7 @@ mongoose
     })
     .catch((error) => {
         console.error("MongoDB connection error:", error);
+        process.exit(1);
     });
 
 
@@ -746,10 +747,20 @@ app.delete(
 // START SERVER
 // ====================
 
-app.listen(PORT, () => {
+async function startServer() {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
 
-    console.log(
-        `Backend server running at http://localhost:${PORT}`
-    );
+        console.log("MongoDB connected successfully");
 
-});
+        app.listen(PORT, "0.0.0.0", () => {
+            console.log(`Backend server running on port ${PORT}`);
+        });
+
+    } catch (error) {
+        console.error("MongoDB connection error:", error);
+        process.exit(1);
+    }
+}
+
+startServer();
