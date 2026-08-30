@@ -1,46 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Blog</title>
+    <title>My Blog | Share Your Ideas</title>
 
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
             font-family: Arial, sans-serif;
-            background: #f4f6f8;
+            background: #f5f7fa;
             color: #222;
         }
 
+        /* NAVBAR */
         nav {
             background: #222;
-            padding: 20px;
-            text-align: center;
+            padding: 16px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
         }
 
         nav a {
             color: white;
             text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
+            font-weight: 500;
         }
 
+        nav a:hover {
+            color: #ddd;
+        }
+
+        /* HERO */
         .hero {
-            text-align: center;
             background: white;
-            padding: 70px 20px;
+            text-align: center;
+            padding: 80px 20px;
         }
 
         .hero h1 {
-            font-size: 40px;
-            margin-bottom: 15px;
+            font-size: 46px;
+            margin-bottom: 18px;
         }
 
         .hero p {
             color: #666;
             font-size: 18px;
+            max-width: 600px;
+            margin: auto;
+            line-height: 1.6;
         }
 
         .buttons {
@@ -49,10 +76,11 @@
 
         .btn {
             display: inline-block;
-            padding: 12px 20px;
+            padding: 13px 22px;
             margin: 5px;
-            border-radius: 6px;
+            border-radius: 7px;
             text-decoration: none;
+            font-weight: bold;
         }
 
         .primary {
@@ -61,61 +89,164 @@
         }
 
         .secondary {
-            background: #ddd;
+            background: #e5e5e5;
             color: #222;
         }
 
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        /* POSTS */
         .posts {
             width: 90%;
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 1000px;
+            margin: 50px auto;
         }
 
         .posts h2 {
             text-align: center;
+            margin-bottom: 30px;
+            font-size: 30px;
+        }
+
+        #blog-container {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
         }
 
         .post {
             background: white;
             padding: 25px;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
         }
 
+        .post h3 {
+            margin-bottom: 12px;
+            font-size: 21px;
+        }
+
+        .post p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 8px;
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            text-align: center;
+            color: #777;
+            grid-column: 1 / -1;
+        }
+
+        /* FOOTER */
         footer {
-            margin-top: 50px;
+            margin-top: 70px;
             background: #222;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 25px 15px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 600px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 18px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .posts {
+                width: 92%;
+            }
+
+            #blog-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
+    <!-- NAVIGATION -->
+
     <nav>
-        <a href="index.html">Home</a>
-        <a href="login.html">Login</a>
-        <a href="register.html">Register</a>
+
+        <div class="logo">
+            My Blog
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+
+            <a href="login.html">Login</a>
+
+            <a href="register.html">Register</a>
+
+        </div>
+
     </nav>
+
+
+    <!-- HERO -->
 
     <section class="hero">
 
         <h1>Welcome to My Blog</h1>
 
         <p>
-            Share your thoughts, ideas, projects and stories.
+            Share your thoughts, ideas, projects and stories
+            with the world.
         </p>
 
         <div class="buttons">
 
-            <a href="register.html" class="btn primary">
+            <a
+                href="register.html"
+                class="btn primary"
+            >
                 Get Started
             </a>
 
-            <a href="login.html" class="btn secondary">
+            <a
+                href="login.html"
+                class="btn secondary"
+            >
                 Login
             </a>
 
@@ -123,83 +254,181 @@
 
     </section>
 
+
+    <!-- RECENT POSTS -->
+
     <section class="posts">
 
         <h2>Recent Blog Posts</h2>
 
-        <div class="post">
+        <div id="blog-container">
 
-            <h3>My Robotics Project</h3>
-
-            <p>
-                Welcome to my blog. This is where I share
-                my projects, ideas and experiences.
+            <p class="message">
+                Loading blogs...
+            </p>
+            <p class="message">
+                Loading blogs...
             </p>
 
         </div>
 
     </section>
 
+
+    <!-- FOOTER -->
+
     <footer>
 
-        <p>© 2026 My Blog</p>
+        <p>
+            © 2026 My Blog. All rights reserved.
+        </p>
 
     </footer>
-<script>
-    const recentPosts = document.querySelector(".posts");
 
-    const blogs =
-        JSON.parse(localStorage.getItem("blogs")) || [];
 
-    if (blogs.length > 0) {
+    <script>
 
-        const postsHeading =
-            recentPosts.querySelector("h2");
+        const API_URL = "http://localhost:3000";
 
-        const oldPost =
-            recentPosts.querySelector(".post");
+        const blogContainer =
+            document.getElementById("blog-container");
 
-        if (oldPost) {
-            oldPost.remove();
+
+        async function loadRecentBlogs() {
+
+            console.log("INDEX PAGE SCRIPT RUNNING");
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/api/blogs`
+                );
+
+                console.log(
+                    "API response:",
+                    response.status
+                );
+
+
+                const blogs =
+                    await response.json();
+
+                console.log(
+                    "Blogs received:",
+                    blogs
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        blogs.message ||
+                        "Unable to load blogs"
+                    );
+
+                }
+
+
+                blogContainer.innerHTML = "";
+
+
+                if (!blogs || blogs.length === 0) {
+
+                    blogContainer.innerHTML = `
+                        <p class="message">
+                            No blog posts available yet.
+                        </p>
+                    `;
+
+                    return;
+                }
+
+
+                blogs.slice(0, 6).forEach(function (blog) {
+
+                    const post =
+                        document.createElement("div");
+
+                    post.className = "post";
+
+
+                    const preview =
+                        blog.content &&
+                        blog.content.length > 150
+                            ? blog.content.substring(0, 150) + "..."
+                            : blog.content;
+
+
+                    post.innerHTML = `
+
+                        <h3>
+                            ${escapeHTML(blog.title)}
+                        </h3>
+
+                        <p>
+                            By ${escapeHTML(blog.author)}
+                        </p>
+
+                        <p>
+                            Category:
+                            ${escapeHTML(blog.category)}
+                        </p>
+
+                        <p>
+                            ${escapeHTML(preview)}
+                        </p>
+
+                        <a
+                            href="blog-details.html?id=${encodeURIComponent(blog._id)}"
+                            class="read-more"
+                        >
+                            Read More →
+                        </a>
+
+                    `;
+
+
+                    blogContainer.appendChild(post);
+
+                });
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error loading blogs:",
+                    error
+                );
+
+
+                blogContainer.innerHTML = `
+                    <p class="message">
+                        Unable to load blog posts.
+                    </p>
+                `;
+
+            }
+
         }
 
-        blogs.forEach(function(blog, index) {
 
-            const post = document.createElement("div");
+        function escapeHTML(value) {
 
-            post.className = "post";
+            return String(value || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
 
-            post.innerHTML = `
-                <h3>${blog.title}</h3>
+        }
 
-                <p>
-                    By ${blog.author}
-                </p>
 
-                <p>
-                    Category:
-                    ${blog.category || "Not specified"}
-                </p>
+        loadRecentBlogs();
 
-                <p>
-    ${
-        blog.content.length > 150
-            ? blog.content.substring(0, 150) + "..."
-            : blog.content
-    }
-</p>
+    </script>
 
-                <a
-                    href="blog-details.html"
-                    onclick="localStorage.setItem('selectedBlog', ${index})"
-                >
-                    Read More
-                </a>
-            `;
-
-            recentPosts.appendChild(post);
-        });
-    }
-</script>
 </body>
+
 </html>

@@ -2,177 +2,377 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Blog Details - My Blog</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
         }
 
+
         body {
+
             margin: 0;
+
             font-family: Arial, sans-serif;
+
             background: #f5f5f5;
+
             color: #333;
+
         }
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
 
         nav {
+
             background: #222;
+
             padding: 15px 30px;
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
         }
+
 
         .logo {
+
             color: white;
+
             font-size: 22px;
+
             font-weight: bold;
+
         }
+
 
         nav a {
+
             color: white;
+
             text-decoration: none;
+
             margin-left: 20px;
+
         }
+
 
         nav a:hover {
+
             color: #ddd;
+
         }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
 
         .container {
+
             width: 90%;
+
             max-width: 800px;
+
             margin: 50px auto;
+
         }
+
+
+        /* =========================
+           BLOG CARD
+        ========================= */
 
         .blog-details {
+
             background: white;
+
             padding: 35px;
+
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.1);
+
         }
+
 
         .blog-details h1 {
+
             margin-top: 0;
+
             margin-bottom: 15px;
+
+            font-size: 32px;
+
         }
+
 
         .author {
+
             color: #777;
+
             margin-bottom: 10px;
+
         }
+
 
         .category {
+
             font-weight: bold;
+
             margin-bottom: 25px;
+
         }
+
 
         .content {
+
             line-height: 1.8;
+
             white-space: pre-wrap;
+
+            font-size: 17px;
+
         }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
 
         .back-btn {
+
             display: inline-block;
+
             margin-top: 30px;
+
             padding: 12px 20px;
+
             background: #222;
+
             color: white;
+
             text-decoration: none;
+
             border-radius: 6px;
+
         }
+
 
         .back-btn:hover {
+
             background: #444;
+
         }
+
+
+        /* =========================
+           ERROR
+        ========================= */
 
         .error {
+
             text-align: center;
+
         }
+
+
+        .error h1 {
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .error p {
+
+            color: #777;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            nav {
+
+                flex-direction: column;
+
+                gap: 12px;
+
+                padding: 18px;
+
+            }
+
+
+            nav a {
+
+                margin-left: 8px;
+
+                margin-right: 8px;
+
+            }
+
+
+            .container {
+
+                width: 92%;
+
+                margin: 30px auto;
+
+            }
+
+
+            .blog-details {
+
+                padding: 25px;
+
+            }
+
+
+            .blog-details h1 {
+
+                font-size: 26px;
+
+            }
+
+
+            .content {
+
+                font-size: 16px;
+
+            }
+
+        }
+
     </style>
+
 </head>
 
+
 <body>
+
+
+    <!-- =========================
+         NAVIGATION
+    ========================= -->
 
     <nav>
 
         <div class="logo">
+
             My Blog
+
         </div>
 
+
         <div>
-            <a href="index.html">Home</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="create-blog.html">Create Blog</a>
-            <a href="login.html">Login</a>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="create-blog.html">
+                Create Blog
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
+
         </div>
 
     </nav>
 
 
+
+    <!-- =========================
+         BLOG DETAILS
+    ========================= -->
+
     <div class="container">
 
-        <div class="blog-details" id="blog-details">
+        <div
+            class="blog-details"
+            id="blog-details"
+        >
 
-            <p>Loading blog...</p>
+            <p>
+                Loading blog...
+            </p>
 
         </div>
 
     </div>
 
 
+
     <script>
 
-        const API_URL = "http://localhost:3000";
+        // ==============================
+        // BACKEND URL
+        // ==============================
+
+        const API_URL =
+            "http://localhost:3000";
+
+
+        // ==============================
+        // BLOG CONTAINER
+        // ==============================
 
         const blogDetails =
-            document.getElementById("blog-details");
+            document.getElementById(
+                "blog-details"
+            );
 
 
         // ==============================
-        // GET TOKEN
+        // GET BLOG ID FROM URL
         // ==============================
 
-        const token =
-            localStorage.getItem("token");
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
 
 
-        // ==============================
-        // CHECK LOGIN
-        // ==============================
+        const blogId =
+            urlParams.get("id");
 
-        if (!token) {
 
-            blogDetails.innerHTML = `
-
-                <div class="error">
-
-                    <h1>Please Login</h1>
-
-                    <p>
-                        You must be logged in to view this blog.
-                    </p>
-
-                    <a
-                        href="login.html"
-                        class="back-btn"
-                    >
-                        Go to Login
-                    </a>
-
-                </div>
-
-            `;
-
-        } else {
-
-            loadBlogDetails();
-
-        }
+        console.log(
+            "Blog ID:",
+            blogId
+        );
 
 
         // ==============================
@@ -181,14 +381,8 @@
 
         async function loadBlogDetails() {
 
-            const urlParams =
-                new URLSearchParams(
-                    window.location.search
-                );
 
-            const blogId =
-                urlParams.get("id");
-
+            // No ID
 
             if (!blogId) {
 
@@ -197,37 +391,31 @@
                 );
 
                 return;
+
             }
-
-
-            console.log(
-                "Loading blog ID:",
-                blogId
-            );
 
 
             try {
 
+
+                console.log(
+                    "Loading blog:",
+                    blogId
+                );
+
+
+                // ==============================
+                // API REQUEST
+                // ==============================
+
                 const response =
                     await fetch(
-                        `${API_URL}/api/blogs/${blogId}`,
-                        {
-                            method: "GET",
-
-                            headers: {
-
-                                "Authorization":
-                                    `Bearer ${token}`,
-
-                                "Content-Type":
-                                    "application/json"
-                            }
-                        }
+                        `${API_URL}/api/blogs/${blogId}`
                     );
 
 
                 console.log(
-                    "Blog details status:",
+                    "Response status:",
                     response.status
                 );
 
@@ -237,32 +425,9 @@
 
 
                 console.log(
-                    "Blog details response:",
+                    "Blog response:",
                     data
                 );
-
-
-                // ==============================
-                // TOKEN EXPIRED
-                // ==============================
-
-                if (
-                    response.status === 401 ||
-                    response.status === 403
-                ) {
-
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
-
-                    alert(
-                        "Your session has expired. Please login again."
-                    );
-
-                    window.location.href =
-                        "login.html";
-
-                    return;
-                }
 
 
                 // ==============================
@@ -277,6 +442,7 @@
                     );
 
                     return;
+
                 }
 
 
@@ -290,39 +456,57 @@
                         ${escapeHTML(data.title)}
                     </h1>
 
+
                     <div class="author">
-                        By ${escapeHTML(data.author)}
+
+                        By
+                        ${escapeHTML(data.author)}
+
                     </div>
 
+
                     <div class="category">
+
                         Category:
                         ${escapeHTML(
                             data.category ||
                             "Not specified"
                         )}
+
                     </div>
 
+
                     <div class="content">
-                        ${escapeHTML(data.content)}
+
+                        ${escapeHTML(
+                            data.content
+                        )}
+
                     </div>
+
 
                     <a
                         href="dashboard.html"
                         class="back-btn"
                     >
+
                         ← Back to Dashboard
+
                     </a>
 
                 `;
+
 
             }
 
             catch (error) {
 
+
                 console.error(
                     "Blog details error:",
                     error
                 );
+
 
                 showError(
                     "Unable to connect to the backend server."
@@ -331,6 +515,7 @@
             }
 
         }
+
 
 
         // ==============================
@@ -343,17 +528,23 @@
 
                 <div class="error">
 
-                    <h1>Blog Not Found</h1>
+                    <h1>
+                        Blog Not Found
+                    </h1>
+
 
                     <p>
                         ${escapeHTML(message)}
                     </p>
 
+
                     <a
-                        href="dashboard.html"
+                        href="index.html"
                         class="back-btn"
                     >
-                        ← Back to Dashboard
+
+                        ← Back to Home
+
                     </a>
 
                 </div>
@@ -363,6 +554,7 @@
         }
 
 
+
         // ==============================
         // SECURITY
         // ==============================
@@ -370,15 +562,44 @@
         function escapeHTML(value) {
 
             return String(value || "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
 
         }
 
+
+
+        // ==============================
+        // START
+        // ==============================
+
+        loadBlogDetails();
+
     </script>
+
 
 </body>
 

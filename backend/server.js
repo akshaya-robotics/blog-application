@@ -505,27 +505,22 @@ app.post(
 
 
 // ====================
-// GET ONLY LOGGED-IN USER'S BLOGS
+// GET ALL BLOGS - PUBLIC
 // ====================
 
 app.get(
     "/api/blogs",
-    authenticateToken,
     async (req, res) => {
 
         try {
 
             const blogs =
-                await Blog.find({
-                    userId: req.user.userId
-                })
-                .sort({
-                    createdAt: -1
-                });
-
+                await Blog.find()
+                    .sort({
+                        createdAt: -1
+                    });
 
             res.json(blogs);
-
 
         } catch (error) {
 
@@ -535,14 +530,10 @@ app.get(
             );
 
             res.status(500).json({
-
                 message:
                     "Failed to retrieve blogs"
-
             });
-
         }
-
     }
 );
 
@@ -553,41 +544,36 @@ app.get(
 
 app.get(
     "/api/blogs/:id",
-    authenticateToken,
     async (req, res) => {
 
         try {
 
-            console.log("Requested blog ID:", req.params.id);
-            console.log("Logged-in user ID:", req.user.userId);
+            console.log(
+                "Requested blog ID:",
+                req.params.id
+            );
 
-            const blog = await Blog.findById(req.params.id);
+            const blog =
+                await Blog.findById(req.params.id);
 
             if (!blog) {
 
-                console.log("Blog does not exist.");
+                console.log(
+                    "Blog does not exist."
+                );
 
                 return res.status(404).json({
                     message: "Blog not found"
                 });
             }
 
-            console.log("Blog found:", blog);
+            console.log(
+                "Blog found:",
+                blog
+            );
 
-            // Check ownership
-            if (
-                blog.userId &&
-                blog.userId.toString() !==
-                req.user.userId.toString()
-            ) {
-
-                console.log("User does not own this blog.");
-
-                return res.status(403).json({
-                    message:
-                        "You do not have permission to view this blog"
-                });
-            }
+            // Return the blog
+            // No login required to read blogs
 
             res.json(blog);
 
@@ -604,7 +590,6 @@ app.get(
         }
     }
 );
-
 
 // ====================
 // UPDATE BLOG
