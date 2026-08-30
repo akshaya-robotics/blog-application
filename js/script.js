@@ -1,6 +1,6 @@
 console.log("SCRIPT.JS LOADED");
 
-const API_URL = "https://blog-application-oe0l.onrender.com";
+const API_URL = "https://blog-application-backend-13nt.onrender.com";
 
 // ==============================
 // AUTH HELPERS
